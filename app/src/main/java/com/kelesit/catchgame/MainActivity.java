@@ -1,12 +1,16 @@
 package com.kelesit.catchgame;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Random;
 
@@ -53,6 +57,31 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                handler.removeCallbacks(runnable);
+                for(ImageView image:resimDizisi){
+                    image.setVisibility(View.INVISIBLE);
+                }
+
+                txtZaman.setText("SÜRE DOLDU");
+                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                alert.setTitle("Süre Doldu");
+                alert.setMessage("Yeniden başlamak ister misiniz?");
+                alert.setPositiveButton("Evet", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
+
+                    }
+                });
+                alert.setNegativeButton("Hayır", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(MainActivity.this, "Oyun Bitti", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                alert.show();
 
             }
         }.start();
